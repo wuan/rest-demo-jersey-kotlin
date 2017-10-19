@@ -1,10 +1,10 @@
-package com.tngtech.demo.weather.domain.measurement;
+package com.tngtech.demo.weather.domain.measurement
 
 /**
  * The various types of data points we can collect.
  */
 
-public enum DataPointType {
+enum class DataPointType {
     WIND,
     TEMPERATURE,
     HUMIDITY,

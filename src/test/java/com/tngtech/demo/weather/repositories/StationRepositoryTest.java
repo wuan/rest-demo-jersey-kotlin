@@ -36,7 +36,7 @@ public class StationRepositoryTest {
         assertThat(repository.getStationById(stationWithId.id)).isNotEmpty().have(new Condition<WithId<Station>>() {
             @Override
             public boolean matches(WithId<Station> station) {
-                return station.object.name.equals("foo") &&
+                return station.object.getName().equals("foo") &&
                         station.object.latitude() == 49.0 &&
                         station.object.longitude() == 11.0;
             }

@@ -23,14 +23,14 @@ public class StationDataRepositoryTest {
     public void shouldAcceptWindDataInValidRange() {
         repository.update(createData(DataPointType.WIND, 0.0));
 
-        Assertions.assertThat(repository.toData().wind).isEqualTo(createData(DataPointType.WIND, 0.0));
+        Assertions.assertThat(repository.toData().getWind()).isEqualTo(createData(DataPointType.WIND, 0.0));
     }
 
     @Test
     public void shouldIgnoreWindDataInValidRange() {
         repository.update(createData(DataPointType.WIND, -0.0001));
 
-        Assertions.assertThat(repository.toData().wind).isNull();
+        Assertions.assertThat(repository.toData().getWind()).isNull();
     }
 
     @Test
@@ -38,7 +38,7 @@ public class StationDataRepositoryTest {
         final DataPoint data = createData(DataPointType.TEMPERATURE, -50.0);
         repository.update(data);
 
-        Assertions.assertThat(repository.toData().temperature).isEqualTo(data);
+        Assertions.assertThat(repository.toData().getTemperature()).isEqualTo(data);
     }
 
     @Test
@@ -46,21 +46,21 @@ public class StationDataRepositoryTest {
         final DataPoint data = createData(DataPointType.TEMPERATURE, 99.999999);
         repository.update(data);
 
-        Assertions.assertThat(repository.toData().temperature).isEqualTo(data);
+        Assertions.assertThat(repository.toData().getTemperature()).isEqualTo(data);
     }
 
     @Test
     public void shouldIgnoreTemperatureDataBelowLowestValidValue() {
         repository.update(createData(DataPointType.TEMPERATURE, -50.0001));
 
-        Assertions.assertThat(repository.toData().temperature).isNull();
+        Assertions.assertThat(repository.toData().getTemperature()).isNull();
     }
 
     @Test
     public void shouldIgnoreTemperatureDataAboveHighestValidValue() {
         repository.update(createData(DataPointType.TEMPERATURE, 100.0));
 
-        Assertions.assertThat(repository.toData().temperature).isNull();
+        Assertions.assertThat(repository.toData().getTemperature()).isNull();
     }
 
     private DataPoint createData(DataPointType type, double mean) {

@@ -46,7 +46,7 @@ public class StationResourceIntegrationTest {
 
         assertThat(station).isNotNull();
 
-        assertThat(station.name).isEqualTo("FOO");
+        assertThat(station.getName()).isEqualTo("FOO");
         assertThat(station.latitude()).isEqualTo(49.0);
         assertThat(station.longitude()).isEqualTo(11);
     }

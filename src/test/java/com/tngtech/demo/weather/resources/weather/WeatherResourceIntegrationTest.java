@@ -67,7 +67,7 @@ public class WeatherResourceIntegrationTest {
     @Test
     public void weatherQueryShouldReturnPreviouslyUploadedData() throws Exception {
         List<AtmosphericData> ais = weatherResource.queryWeatherByStation(station1.id, null);
-        assertThat(ais.get(0).wind).isEqualTo(dataPoint);
+        assertThat(ais.get(0).getWind()).isEqualTo(dataPoint);
     }
 
     @Test
@@ -101,8 +101,8 @@ public class WeatherResourceIntegrationTest {
         weatherResource.updateWeather(station1.id, cloudCoverDp);
 
         List<AtmosphericData> ais = weatherResource.queryWeatherByStation(station1.id, null);
-        assertThat(ais.get(0).wind).isEqualTo(windDp);
-        assertThat(ais.get(0).cloudCover).isEqualTo(cloudCoverDp);
+        assertThat(ais.get(0).getWind()).isEqualTo(windDp);
+        assertThat(ais.get(0).getCloudCover()).isEqualTo(cloudCoverDp);
     }
 
     @Test

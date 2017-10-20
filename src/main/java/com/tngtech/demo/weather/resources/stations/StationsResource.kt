@@ -10,30 +10,24 @@ import com.tngtech.demo.weather.repositories.StationRepository
 import com.tngtech.demo.weather.resources.Paths
 import com.tngtech.demo.weather.resources.Roles
 import io.swagger.annotations.Api
-import lombok.AllArgsConstructor
-import lombok.extern.slf4j.Slf4j
-import lombok.`val`
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
-
 import javax.annotation.security.RolesAllowed
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 
-import java.util.Objects.requireNonNull
-
 @Path(Paths.STATIONS)
 @Component
 @Api(value = Paths.STATIONS, description = "stations resource")
-class StationsResource : JerseyResource {
+open class StationsResource(
+        private val stationRepository: StationRepository,
+        private val stationsHyperschemaCreator: StationsHyperschemaCreator
+) : JerseyResource {
 
     companion object {
         val log = LoggerFactory.getLogger(StationsResource::class.java)
     }
 
-    private val stationRepository: StationRepository? = null
-
-    private val stationsHyperschemaCreator: StationsHyperschemaCreator? = null
 
     /**
      * Return a list of known airports as a json formatted list
@@ -42,8 +36,8 @@ class StationsResource : JerseyResource {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    fun getStations(@QueryParam(Paths.OFFSET) @DefaultValue("0") offset: Int?,
-                    @QueryParam(Paths.LIMIT) @DefaultValue("100") limit: Int?): PaginatedResponse<WithId<Station>> {
+    open fun getStations(@QueryParam(Paths.OFFSET) @DefaultValue("0") offset: Int?,
+                         @QueryParam(Paths.LIMIT) @DefaultValue("100") limit: Int?): PaginatedResponse<WithId<Station>> {
         var offset = offset
         var limit = limit
         log.debug("getStations({}, {})", offset, limit)
@@ -51,12 +45,12 @@ class StationsResource : JerseyResource {
         limit = if (limit == null) 2000 else limit
 
         val paginatedStations = PaginatedList<WithId<Station>>(
-                stationRepository!!.totalCount!!.toInt(),
+                stationRepository.totalCount.toInt(),
                 offset,
                 limit,
                 stationRepository.getStations(offset, limit))
 
-        return stationsHyperschemaCreator!!.createPaginatedResponse(paginatedStations)
+        return stationsHyperschemaCreator.createPaginatedResponse(paginatedStations)
     }
 
     /**
@@ -68,19 +62,21 @@ class StationsResource : JerseyResource {
     @POST
     @RolesAllowed(Roles.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
-    fun addStation(station: Station): ObjectWithSchema<WithId<Station>> {
-        requireNonNull(station)
+    open fun addStation(station: Station?): ObjectWithSchema<WithId<Station>> {
+        if (station == null) {
+            throw NullPointerException()
+        }
 
         log.debug("addStation({}, {}, {})", station.name, station.latitude, station.longitude)
 
         val stationWithId = WithId.create(station)
-        stationRepository!!.addStation(stationWithId)
+        stationRepository.addStation(stationWithId)
 
-        return stationsHyperschemaCreator!!.create(stationWithId)
+        return stationsHyperschemaCreator.create(stationWithId)
     }
 
     @Path("/{" + Paths.STATION_ID + "}")
-    fun stationSubResource(): Class<StationResource> {
+    open fun stationSubResource(): Class<StationResource> {
         return StationResource::class.java
     }
 }

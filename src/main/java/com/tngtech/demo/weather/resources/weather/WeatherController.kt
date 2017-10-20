@@ -1,5 +1,7 @@
 package com.tngtech.demo.weather.resources.weather
 
+import com.mercateo.common.rest.schemagen.types.WithId
+import com.tngtech.demo.weather.domain.Station
 import com.tngtech.demo.weather.domain.gis.Point
 import com.tngtech.demo.weather.domain.measurement.AtmosphericData
 import com.tngtech.demo.weather.lib.EventCounter
@@ -9,25 +11,23 @@ import com.tngtech.demo.weather.repositories.StationRepository
 import com.tngtech.demo.weather.repositories.WeatherDataRepository
 import org.springframework.stereotype.Component
 import java.util.*
-import javax.inject.Inject
-
-fun <T, U> T?.flatMap(body: (T) -> U?): U? =
-        if (this != null) body(this) else null
 
 @Component
-internal class WeatherController @Inject
-constructor(private val stationRepository: StationRepository, private val weatherDataRepository: WeatherDataRepository, private val timestampFactory: TimestampFactory, private val requestFrequency: EventCounter<UUID>, private val radiusFrequency: EventCounter<Double>, private val geoCalculations: GeoCalculations) {
+class WeatherController(
+        private val stationRepository: StationRepository,
+        private val weatherDataRepository: WeatherDataRepository,
+        private val timestampFactory: TimestampFactory,
+        private val requestFrequency: EventCounter<UUID>,
+        private val radiusFrequency: EventCounter<Double>,
+        private val geoCalculations: GeoCalculations
+) {
 
     val statistics: Map<String, Any>
         get() {
             val result = HashMap<String, Any>()
-
             result.put("datasize", countOfDataUpdatedSinceADayAgo)
-
             result.put("station_freq", stationFractions)
-
             result.put("radius_freq", radiusHistogram)
-
             return result
         }
 
@@ -96,28 +96,25 @@ constructor(private val stationRepository: StationRepository, private val weathe
                                             .calculateDistance(otherStation.`object`, centerStation.`object`) <= radius
                                 }
                                 .map { station -> station.id }
-                        map.flatMap { weatherDataRepository.getWeatherDataFor(it) }
+                        map.flatMap { weatherDataRepository.getWeatherDataFor(it)?.let { listOf(it) } ?: emptyList() }
                     }
                     ?: emptyList()
         }
     }
 
     fun queryWeather(location: Point, radius: Double?): List<AtmosphericData> {
-        return List.empty()
+        return emptyList()
     }
-
-    fun assertLaw3() {
-        val monadValue : Int? = 23
-        val lhs = monadValue.flatMap {it}
-    }
-
 
     private fun updateRequestFrequency(stationId: UUID, radius: Double?) {
-        stationRepository
+        val stationById: WithId<Station>? = stationRepository
                 .getStationById(stationId)
-                .forEach { station ->
+        stationById
+                ?.let { station ->
                     requestFrequency.increment(station.id)
-                    radiusFrequency.increment(radius)
+                    if (radius != null) {
+                        radiusFrequency.increment(radius)
+                    }
                 }
     }
 

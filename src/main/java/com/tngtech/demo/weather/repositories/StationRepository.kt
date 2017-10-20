@@ -13,7 +13,7 @@ class StationRepository {
     val stations: List<WithId<Station>>
         get() = getStations(0, Integer.MAX_VALUE)
 
-    val totalCount: Long?
+    val totalCount: Long
         get() = stationsById.mappingCount()
 
     fun addStation(newStation: WithId<Station>) {

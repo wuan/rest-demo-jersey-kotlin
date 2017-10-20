@@ -48,7 +48,7 @@ open class WeatherResource(
      *
      * @return a JSON formatted dict with health information.
      */
-    val statistics: Map<String, Any>
+    open val statistics: Map<String, Any>
         @GET
         @Path(STATISTICS)
         @Produces(MediaType.APPLICATION_JSON)

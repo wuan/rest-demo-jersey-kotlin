@@ -2,16 +2,15 @@ package com.tngtech.demo.weather.repositories
 
 import com.tngtech.demo.weather.domain.measurement.AtmosphericData
 import com.tngtech.demo.weather.domain.measurement.DataPoint
-import io.vavr.control.Option
 import org.springframework.stereotype.Component
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
-import javax.inject.Inject
 import javax.inject.Provider
 
 @Component
-class WeatherDataRepository @Inject
-private constructor(private val stationDataRepositoryProvider: Provider<StationDataRepository>) {
+class WeatherDataRepository(
+        private val stationDataRepositoryProvider: Provider<StationDataRepository>
+) {
 
     private val stationDataRepositoryByStationId = ConcurrentHashMap<UUID, StationDataRepository>()
 

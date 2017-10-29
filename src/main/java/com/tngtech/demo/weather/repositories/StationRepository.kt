@@ -22,7 +22,7 @@ class StationRepository {
 
     fun getStationById(stationId: UUID): WithId<Station>? {
         return stationsById[stationId]
-                .let { station -> WithId.create(stationId, station) }
+                ?.let { station -> WithId.create(stationId, station) }
     }
 
     fun getStations(offset: Int?, limit: Int?): List<WithId<Station>> {

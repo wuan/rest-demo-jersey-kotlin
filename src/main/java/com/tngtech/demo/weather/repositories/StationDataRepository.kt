@@ -8,18 +8,18 @@ import org.springframework.beans.factory.config.BeanDefinition
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentHashMap
-import javax.inject.Inject
 
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
-internal class StationDataRepository @Inject
-constructor(private val timestampFactory: TimestampFactory) {
+open class StationDataRepository(
+        private val timestampFactory: TimestampFactory
+) {
 
     private val dataPointByType = ConcurrentHashMap<DataPointType, DataPoint>()
 
     private var lastUpdateTime = 0L
 
-    fun update(data: DataPoint) {
+    open fun update(data: DataPoint) {
         val shouldAddData = acceptanceRuleByType
                 .get(data.type)
                 ?.let { rulePredicate: (DataPoint) -> Boolean -> rulePredicate.invoke(data) }
@@ -31,17 +31,18 @@ constructor(private val timestampFactory: TimestampFactory) {
         }
     }
 
-    fun toData(): AtmosphericData {
-        val data = AtmosphericData(lastUpdateTime = lastUpdateTime)
+    open fun toData(): AtmosphericData {
+        var data = AtmosphericData(lastUpdateTime = lastUpdateTime)
 
         typesWithBuilderMethods.forEach { dataTypeAndBuilderMethod ->
             val dataType = dataTypeAndBuilderMethod.first
-            val builderAdapter = dataTypeAndBuilderMethod.second
+            val updateAdapter = dataTypeAndBuilderMethod.second
 
             val dataPoint: DataPoint? = dataPointByType[dataType]
-            dataPoint?.let { builderAdapter.invoke(data, it) }
+            if (dataPoint != null) {
+                data = dataPoint.let { updateAdapter.invoke(data, it) }
+            }
         }
-
 
         return data
     }
@@ -58,11 +59,11 @@ constructor(private val timestampFactory: TimestampFactory) {
 
         private val typesWithBuilderMethods = listOf(
                 Pair(DataPointType.WIND, { data: AtmosphericData, point: DataPoint -> data.copy(wind = point) }),
-                Pair(DataPointType.TEMPERATURE, { data: AtmosphericData, point: DataPoint -> data.copy(wind = point) }),
-                Pair(DataPointType.HUMIDITY, { data: AtmosphericData, point: DataPoint -> data.copy(wind = point) }),
-                Pair(DataPointType.PRESSURE, { data: AtmosphericData, point: DataPoint -> data.copy(wind = point) }),
-                Pair(DataPointType.CLOUDCOVER, { data: AtmosphericData, point: DataPoint -> data.copy(wind = point) }),
-                Pair(DataPointType.PRECIPITATION, { data: AtmosphericData, point: DataPoint -> data.copy(wind = point) })
+                Pair(DataPointType.TEMPERATURE, { data: AtmosphericData, point: DataPoint -> data.copy(temperature = point) }),
+                Pair(DataPointType.HUMIDITY, { data: AtmosphericData, point: DataPoint -> data.copy(humidity = point) }),
+                Pair(DataPointType.PRESSURE, { data: AtmosphericData, point: DataPoint -> data.copy(pressure = point) }),
+                Pair(DataPointType.CLOUDCOVER, { data: AtmosphericData, point: DataPoint -> data.copy(cloudCover = point) }),
+                Pair(DataPointType.PRECIPITATION, { data: AtmosphericData, point: DataPoint -> data.copy(precipitation = point) })
         )
 
     }

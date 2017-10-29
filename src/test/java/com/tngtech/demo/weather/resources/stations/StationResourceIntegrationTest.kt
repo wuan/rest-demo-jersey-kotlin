@@ -47,7 +47,7 @@ class StationResourceIntegrationTest {
 
         assertThat(station.name).isEqualTo("FOO")
         assertThat(station.latitude).isEqualTo(49.0)
-        assertThat(station.longitude).isEqualTo(11)
+        assertThat(station.longitude).isEqualTo(11.0)
     }
 
     @Test

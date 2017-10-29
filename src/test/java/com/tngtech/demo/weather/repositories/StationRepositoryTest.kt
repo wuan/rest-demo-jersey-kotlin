@@ -2,15 +2,13 @@ package com.tngtech.demo.weather.repositories
 
 import com.mercateo.common.rest.schemagen.types.WithId
 import com.tngtech.demo.weather.domain.Station
+import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Condition
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
-import org.mockito.runners.MockitoJUnitRunner
-
-import java.util.UUID
-
-import org.assertj.core.api.Assertions.assertThat
+import org.mockito.junit.MockitoJUnitRunner
+import java.util.*
 
 @RunWith(MockitoJUnitRunner::class)
 class StationRepositoryTest {
@@ -30,7 +28,7 @@ class StationRepositoryTest {
 
     @Test
     fun anAddedStationShouldBePersisted() {
-        val stationWithId = WithId.create(Station(name="foo", latitude=49.0, longitude=11.0))
+        val stationWithId = WithId.create(Station(name = "foo", latitude = 49.0, longitude = 11.0))
         repository.addStation(stationWithId)
 
         assertThat(repository.getStationById(stationWithId.id)).has(object : Condition<WithId<Station>?>() {
@@ -51,7 +49,7 @@ class StationRepositoryTest {
 
     @Test
     fun removedStationShouldDisappearFromRepository() {
-        val stationWithId = WithId.create(Station(name="foo", latitude=49.0, longitude=11.0))
+        val stationWithId = WithId.create(Station(name = "foo", latitude = 49.0, longitude = 11.0))
         repository.addStation(stationWithId)
 
         repository.removeStation(stationWithId.id)

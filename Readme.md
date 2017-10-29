@@ -1,9 +1,8 @@
-[![Build Status](https://travis-ci.org/TNG/rest-demo-jersey.svg?branch=master)](https://travis-ci.org/TNG/rest-demo-jersey)
-[![Coverage Status](https://coveralls.io/repos/github/TNG/rest-demo-jersey/badge.svg?branch=master)](https://coveralls.io/github/TNG/rest-demo-jersey?branch=master)
-[![Dependency Status](https://www.versioneye.com/user/projects/578db6313e6a8b00457f8f82/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/578db6313e6a8b00457f8f82)
+[![Build Status](https://travis-ci.org/wuan/rest-demo-jersey-kotlin.svg?branch=master)](https://travis-ci.org/wuan/rest-demo-jersey-kotlin)
+[![Coverage Status](https://coveralls.io/repos/github/wuan/rest-demo-jersey-kotlin/badge.svg?branch=master)](https://coveralls.io/github/wuan/rest-demo-jersey-kotlin?branch=master)
 
 # rest-demo-jersey
-Spring-boot and Jersey based REST service showing the integration of [rest-schemagen](http://github.com/Mercateo/rest-schemagen).
+Spring-boot and Jersey based REST service written in Kotlin showing the integration of [rest-schemagen](http://github.com/Mercateo/rest-schemagen).
 
 <img src="https://rawgit.com/TNG/rest-demo-jersey/master/doc/service.svg" alt="service schematics">
 

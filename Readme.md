@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/wuan/rest-demo-jersey-kotlin.svg?branch=master)](https://travis-ci.org/wuan/rest-demo-jersey-kotlin)
 [![Coverage Status](https://coveralls.io/repos/github/wuan/rest-demo-jersey-kotlin/badge.svg?branch=master)](https://coveralls.io/github/wuan/rest-demo-jersey-kotlin?branch=master)
+[![APL2 License](http://img.shields.io/badge/license-APL2-green.svg)](https://raw.githubusercontent.com/wuan/rest-demo-jersey-kotline/master/LICENSE)
 
 # rest-demo-jersey-kotlin
 Spring-boot and Jersey based REST service written in Kotlin showing the integration of [rest-schemagen](http://github.com/Mercateo/rest-schemagen).

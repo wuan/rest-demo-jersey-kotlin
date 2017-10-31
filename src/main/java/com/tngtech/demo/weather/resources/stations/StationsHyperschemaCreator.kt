@@ -2,12 +2,14 @@ package com.tngtech.demo.weather.resources.stations
 
 import com.mercateo.common.rest.schemagen.types.*
 import com.tngtech.demo.weather.domain.Station
+import com.tngtech.demo.weather.resources.weather.WeatherLinkCreator
 import org.springframework.stereotype.Component
 
 @Component
 class StationsHyperschemaCreator(
         private val stationLinkCreator: StationLinkCreator,
         private val stationsLinkCreator: StationsLinkCreator,
+        private val weatherLinkCreator: WeatherLinkCreator,
         private val responseBuilderCreator: PaginatedResponseBuilderCreator,
         private val hyperSchemaCreator: HyperSchemaCreator
 ) {
@@ -24,6 +26,8 @@ class StationsHyperschemaCreator(
     }
 
     fun create(stationWithId: WithId<Station>): ObjectWithSchema<WithId<Station>> {
-        return hyperSchemaCreator.create(stationWithId, stationLinkCreator.createFor(stationWithId.id))
+        return hyperSchemaCreator.create(stationWithId,
+                stationLinkCreator.createFor(stationWithId.id) +
+                        weatherLinkCreator.createForStation(stationWithId.id))
     }
 }

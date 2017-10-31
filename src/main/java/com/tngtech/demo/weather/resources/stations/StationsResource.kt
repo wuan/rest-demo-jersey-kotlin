@@ -40,7 +40,7 @@ open class StationsResource(
                          @QueryParam(Paths.LIMIT) @DefaultValue("100") limit: Int?): PaginatedResponse<WithId<Station>> {
         var offset = offset
         var limit = limit
-        log.debug("getStations({}, {})", offset, limit)
+        log.debug("getStations({}, {}) #{}", offset, limit, stationRepository.totalCount)
         offset = if (offset == null) 0 else offset
         limit = if (limit == null) 2000 else limit
 

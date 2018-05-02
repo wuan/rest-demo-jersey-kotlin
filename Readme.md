@@ -38,3 +38,7 @@ GET: http://localhost:9090/api/stations
 
 * create: POST /api/stations {u'type': u'object', u'properties': {u'latitude': {u'type': u'number'}, u'name': {u'type': u'string'}, u'longitude': {u'type': u'number'}}}
 * self: GET /api/stations?offset=0&limit=100 
+
+# License
+
+rest-demo-jersey is published under the Apache License 2.0, see http://www.apache.org/licenses/LICENSE-2.0 for details.
